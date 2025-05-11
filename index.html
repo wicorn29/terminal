@@ -1,19 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0;url=https://proxmox.wicorn29.net">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Redirecting...</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Terminal 01</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      background-color: red;
+      background: #1e1e1e;
+      font-family: system-ui, sans-serif;
+      overflow: hidden;
+    }
+
+    .topbar {
+      background: #111;
+      color: #fff;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    .desktop {
+      position: relative;
+      height: calc(100% - 40px);
+      width: 100%;
+    }
+
+    .window {
+      width: 450px;
+      background: #2b2b2b;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      position: absolute;
+      top: 100px;
+      left: 100px;
+    }
+
+    .window-header {
+      background: #1e1e1e;
+      padding: 0.5rem;
+      cursor: move;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
+    .window-title {
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 6px;
+    }
+
+    .control-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #555;
+    }
+
+    .window-content {
+      padding: 1rem;
+    }
+
+    .app-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    .app-button {
+      background: #3a3a3a;
+      color: #fff;
+      padding: 0.8rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      text-align: left;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+
+    .app-button:hover {
+      background: #555;
+    }
+
+    .taskbar {
+      height: 30px;
+      background: #000;
+      color: #888;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1rem;
+      font-size: 0.8rem;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
+
+    #flash {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      display: none;
     }
   </style>
 </head>
 <body>
+  <div class="topbar">Terminal 01</div>
+  <div class="desktop">
+    <div class="window" id="draggableWindow">
+      <div class="window-header" id="windowHeader">
+        <div class="window-title">Terminal Functions</div>
+        <div class="window-controls">
+          <div class="control-dot"></div>
+          <div class="control-dot"></div>
+          <div class="control-dot"></div>
+        </div>
+      </div>
+      <div class="window-content">
+        <div class="app-list">
+          <button class="app-button" onclick="redirectWithFlash('https://proxmox.wicorn29.net')">Proxmox Dashboard</button>
+        </div>
+      </div>
+    </div>
+    <div class="taskbar">
+      <div>Press Ctrl + Alt + Delete and select "Reset Session" when done. If you don’t and the server doesn't log you out, the next user will access your session.</div>
+      <div><strong>TIRROS: ONLINE</strong></div>
+    </div>
+  </div>
+
+  <div id="flash"></div>
+
+  <script>
+    function redirectWithFlash(url) {
+      alert("When finished, press Ctrl + Alt + Delete and select 'Reset Session'.\n\nIf you don't, and the server does not log you out, the next user of this terminal will be able to access things under your account.");
+
+      const flash = document.getElementById('flash');
+      flash.style.display = 'block';
+
+      let colors = ['yellow', 'blue', 'green'];
+      let i = 0;
+
+      function nextFlash() {
+        if (i < colors.length) {
+          flash.style.backgroundColor = colors[i++];
+          setTimeout(nextFlash, 200);
+        } else {
+          window.location.href = url;
+        }
+      }
+
+      nextFlash();
+    }
+
+    // Drag functionality
+    const dragWindow = document.getElementById("draggableWindow");
+    const header = document.getElementById("windowHeader");
+    let offsetX = 0, offsetY = 0, isDragging = false;
+
+    header.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      offsetX = e.clientX - dragWindow.offsetLeft;
+      offsetY = e.clientY - dragWindow.offsetTop;
+    });
+
+    document.addEventListener("mouseup", () => isDragging = false);
+
+    document.addEventListener("mousemove", (e) => {
+      if (isDragging) {
+        dragWindow.style.left = (e.clientX - offsetX) + "px";
+        dragWindow.style.top = (e.clientY - offsetY) + "px";
+      }
+    });
+  </script>
 </body>
 </html>
