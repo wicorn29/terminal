@@ -57,8 +57,9 @@
     #draggableWindow {
       width: 400px;
       position: absolute;
-      top: 80px;
-      left: 50px;
+      top: 50%; /* Centered */
+      left: 50%; /* Centered */
+      transform: translate(-50%, -50%); /* Centered */
       border: 2px solid #00ff00;
       background: #000;
       border-radius: 5px;
@@ -128,7 +129,8 @@
   <div id="draggableWindow">
     <div id="windowHeader">Terminal Functions</div>
     <div id="windowContent">
-      <button class="button" onclick="redirectWithFlash('https://proxmox.wicorn29.net')">proxmox.wicorn29.net (Proxmox)</button>
+      <button class="button" onclick="redirectWithFlash('https://proxmox.wicorn29.net')">Proxmox</button>
+      <button class="button" onclick="redirectWithFlash('http://homeassistant.local:8123')">homeassistant</button>
     </div>
   </div>
 
